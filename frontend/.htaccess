@@ -1,0 +1,7 @@
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Jika tidak memiliki session login, redirect ke 403.html
+  RewriteCond %{HTTP_COOKIE} !isLoggedIn=true
+  RewriteRule ^table\.html$ /403.html [R=302,L]
+</IfModule>

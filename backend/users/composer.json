@@ -1,0 +1,20 @@
+{
+    "name": "azora/users",
+    "autoload": {
+        "psr-4": {
+            "Controllers\\": "src/controllers/",
+            "Models\\": "src/models/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Juan Felix",
+            "email": "juanfelix087756408546@gmail.com"
+        }
+    ],
+    "require": {
+        "illuminate/database": "^12.20",
+        "vlucas/phpdotenv": "^5.6",
+        "firebase/php-jwt": "^6.11"
+    }
+}

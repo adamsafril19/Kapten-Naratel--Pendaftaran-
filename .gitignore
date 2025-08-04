@@ -1,0 +1,9 @@
+# Ignore environment files
+*.env
+
+# Ignore dependencies
+node_modules/
+
+# Ignore upload directories
+backend/pendaftaran/uploads/
+backend/users/uploads/

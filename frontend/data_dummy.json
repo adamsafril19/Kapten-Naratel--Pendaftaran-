@@ -1,0 +1,204 @@
+{
+  "data": [
+    {
+      "no": 1,
+      "tanggal": "2025-07-12",
+      "type_daftar": "Reguler",
+      "unit": "Jalantra",
+      "nama": "M. Sofyan",
+      "no_wa": "6284465868147",
+      "paket": "18",
+      "type_paket": "KAPTEN"
+    },
+    {
+      "no": 2,
+      "tanggal": "2025-07-20",
+      "type_daftar": "Reguler",
+      "unit": "Jalantra",
+      "nama": "Agus",
+      "no_wa": "6281867698533",
+      "paket": "2",
+      "type_paket": "KAPTEN"
+    },
+    {
+      "no": 3,
+      "tanggal": "2025-07-14",
+      "type_daftar": "Reguler",
+      "unit": "Jalantra",
+      "nama": "Dewi",
+      "no_wa": "6282318990474",
+      "paket": "9",
+      "type_paket": "KAPTEN"
+    },
+    {
+      "no": 4,
+      "tanggal": "2025-07-16",
+      "type_daftar": "Reguler",
+      "unit": "Naratel",
+      "nama": "Rina",
+      "no_wa": "6288689135464",
+      "paket": "1",
+      "type_paket": "KAPTEN"
+    },
+    {
+      "no": 5,
+      "tanggal": "2025-07-21",
+      "type_daftar": "Reguler",
+      "unit": "Naratel",
+      "nama": "Andi",
+      "no_wa": "6289959563907",
+      "paket": "11",
+      "type_paket": "KAPTEN"
+    },
+    {
+      "no": 6,
+      "tanggal": "2025-07-16",
+      "type_daftar": "Reguler",
+      "unit": "Naratel",
+      "nama": "Siti",
+      "no_wa": "6285958985539",
+      "paket": "12",
+      "type_paket": "KAPTEN"
+    },
+    {
+      "no": 7,
+      "tanggal": "2025-07-11",
+      "type_daftar": "Reguler",
+      "unit": "Jalantra",
+      "nama": "Budi",
+      "no_wa": "6284496663628",
+      "paket": "5",
+      "type_paket": "KAPTEN"
+    },
+    {
+      "no": 8,
+      "tanggal": "2025-07-14",
+      "type_daftar": "Reguler",
+      "unit": "Jalantra",
+      "nama": "Fitri",
+      "no_wa": "6281431024825",
+      "paket": "4",
+      "type_paket": "KAPTEN"
+    },
+    {
+      "no": 9,
+      "tanggal": "2025-07-11",
+      "type_daftar": "Reguler",
+      "unit": "Naratel",
+      "nama": "Joko",
+      "no_wa": "6285446967583",
+      "paket": "15",
+      "type_paket": "KAPTEN"
+    },
+    {
+      "no": 10,
+      "tanggal": "2025-07-19",
+      "type_daftar": "Reguler",
+      "unit": "Naratel",
+      "nama": "Tiara",
+      "no_wa": "6287917037805",
+      "paket": "6",
+      "type_paket": "KAPTEN"
+    },
+    {
+      "no": 11,
+      "tanggal": "2025-07-17",
+      "type_daftar": "Reguler",
+      "unit": "Jalantra",
+      "nama": "Eka",
+      "no_wa": "6282497222853",
+      "paket": "18",
+      "type_paket": "KAPTEN"
+    },
+    {
+      "no": 12,
+      "tanggal": "2025-07-19",
+      "type_daftar": "Reguler",
+      "unit": "Naratel",
+      "nama": "Dian",
+      "no_wa": "6282340238919",
+      "paket": "10",
+      "type_paket": "KAPTEN"
+    },
+    {
+      "no": 13,
+      "tanggal": "2025-07-18",
+      "type_daftar": "Reguler",
+      "unit": "Jalantra",
+      "nama": "Rama",
+      "no_wa": "6284734493634",
+      "paket": "9",
+      "type_paket": "KAPTEN"
+    },
+    {
+      "no": 14,
+      "tanggal": "2025-07-15",
+      "type_daftar": "Reguler",
+      "unit": "Jalantra",
+      "nama": "Putri",
+      "no_wa": "6284642531751",
+      "paket": "14",
+      "type_paket": "KAPTEN"
+    },
+    {
+      "no": 15,
+      "tanggal": "2025-07-13",
+      "type_daftar": "Reguler",
+      "unit": "Naratel",
+      "nama": "Wawan",
+      "no_wa": "6288016950797",
+      "paket": "1",
+      "type_paket": "KAPTEN"
+    },
+    {
+      "no": 16,
+      "tanggal": "2025-07-18",
+      "type_daftar": "Reguler",
+      "unit": "Naratel",
+      "nama": "Lina",
+      "no_wa": "6289418175151",
+      "paket": "9",
+      "type_paket": "KAPTEN"
+    },
+    {
+      "no": 17,
+      "tanggal": "2025-07-13",
+      "type_daftar": "Reguler",
+      "unit": "Jalantra",
+      "nama": "Yusuf",
+      "no_wa": "6289160817849",
+      "paket": "4",
+      "type_paket": "KAPTEN"
+    },
+    {
+      "no": 18,
+      "tanggal": "2025-07-14",
+      "type_daftar": "Reguler",
+      "unit": "Jalantra",
+      "nama": "Hana",
+      "no_wa": "6287173227924",
+      "paket": "2",
+      "type_paket": "KAPTEN"
+    },
+    {
+      "no": 19,
+      "tanggal": "2025-07-17",
+      "type_daftar": "Reguler",
+      "unit": "Jalantra",
+      "nama": "Bayu",
+      "no_wa": "6282669784484",
+      "paket": "12",
+      "type_paket": "KAPTEN"
+    },
+    {
+      "no": 20,
+      "tanggal": "2025-07-17",
+      "type_daftar": "Reguler",
+      "unit": "Naratel",
+      "nama": "Zahra",
+      "no_wa": "6282612068456",
+      "paket": "7",
+      "type_paket": "KAPTEN"
+    }
+  ]
+}
