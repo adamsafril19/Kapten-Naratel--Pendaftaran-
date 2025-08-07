@@ -1,5 +1,7 @@
+<?php require_once 'require_auth.php'; ?>
 <?php
 ob_start();
+$bodyClass = 'pendaftar-page'; // Added for page-specific styling
 ?>
 <!-- Header dan Subjudul -->
 <div class="d-flex justify-content-between align-items-center px-3 pt-4 pb-2 border-bottom">
@@ -13,11 +15,8 @@ ob_start();
     </small>
   </div>
   <div>
-    <button id="addBtn" class="btn btn-primary me-2">
+    <button id="addBtn" class="btn btn-primary me-2 shadow-primary">
       <i class="bx bx-plus me-1"></i> Tambah
-    </button>
-    <button id="refreshBtn" class="btn btn-outline-secondary">
-      <i class="bx bx-revision me-1"></i> Refresh
     </button>
   </div>
 </div>
@@ -28,21 +27,17 @@ ob_start();
     <div class="table-responsive">
       <table
         id="pendaftaranTable"
-        class="table table-striped table-hover nowrap mb-0"
+        class="table table-striped table-hover mb-0"
         style="min-width:1200px"
       >
         <thead class="table-light">
           <tr>
             <th>No</th>
             <th>Tanggal</th>
-            <th>Type</th>
-            <th>Unit</th>
             <th>Nama</th>
-            <th>No WA</th>
             <th>Alamat</th>
             <th>Status Lokasi</th>
-            <th>Paket</th>
-            <th>Type Paket</th>
+            <th>Sumber</th>
             <th>Alasan</th>
             <th>Aksi</th>
           </tr>
@@ -293,14 +288,10 @@ ob_start();
           <tr>
             <td class="text-center">${i + 1}</td>
             <td>${d}</td>
-            <td><span class="badge bg-dark">${item.jenis_daf_id || '-'}</span></td>
-            <td><span class="badge bg-info">${item.unit_id || '-'}</span></td>
             <td>${item.nama_lengkap}</td>
-            <td>${item.whatsapp?.nomor || '-'}</td>
             <td>${item.alamat}</td>
             <td>${item.status_lokasi?.nama || '-'}</td>
-            <td>${item.layanan_digunakan?.nama || '-'}</td>
-            <td><span class="badge bg-warning">${item.produk_id || '-'}</span></td>
+            <td>${item.tahu_layanan?.nama || '-'}</td>
             <td>${item.alasan?.nama || '-'}</td>
             <td class="text-center">
               <div class="dropdown">
@@ -333,28 +324,7 @@ ob_start();
         dataTable.destroy();
       }
       dataTable = $('#pendaftaranTable').DataTable({
-        scrollX: true,
-        autoWidth: false,
-        responsive: false,
-        fixedHeader: true,
-        columnDefs: [
-          { targets: 0, orderable: false, width: '4%', className: 'text-center' },
-          { targets: 1, width: '8%' },
-          { targets: 2, width: '6%' },
-          { targets: 3, width: '6%' },
-          { targets: 4, width: 'auto' },
-          { targets: 5, width: '8%' },
-          { targets: 6, width: 'auto' },
-          { targets: 7, width: '10%' },
-          { targets: 8, width: 'auto' },
-          { targets: 9, width: '8%' },
-          { targets: 10, width: 'auto' },
-          { targets: 11, orderable: false, searchable: false, width: '12%', className: 'text-center' }
-        ],
-        scrollCollapse: true,
-        paging: true,
-        searching: true,
-        info: true
+
       });
       
       // Force redraw to ensure proper alignment
@@ -366,7 +336,6 @@ ob_start();
   }
 
   // Event listeners
-  document.getElementById('refreshBtn').addEventListener('click', () => location.reload());
   document.getElementById('addBtn').addEventListener('click', () => openModal());
   document.getElementById('saveBtn').addEventListener('click', saveData);
   document.getElementById('confirmDeleteBtn').addEventListener('click', confirmDelete);
@@ -534,11 +503,6 @@ ob_start();
   loadTableData();
 </script>
 
-<style>
-  /* Dropdown di dalam scrollable table */
-  .dataTables_scrollBody { overflow: visible !important; }
-  table.dataTable .dropdown-menu { z-index: 9999 !important; }
-</style>
 <?php
 $content = ob_get_clean();
 $title   = "Data Pendaftaran";

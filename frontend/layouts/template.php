@@ -42,7 +42,7 @@
   <script src="https://unpkg.com/leaflet.heat/dist/leaflet-heat.js"></script>
   <script src="dashboard.js" type="module"></script>
 </head>
-<body >
+<body class="<?= $bodyClass ?? '' ?>">
   <div class="layout-wrapper layout-content-navbar">
     <div class="layout-container">
       <?php include __DIR__ . '/sidebar.php'; ?>
