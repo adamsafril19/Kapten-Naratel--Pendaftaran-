@@ -197,8 +197,8 @@ class DashboardEnhanced {
             this.updateLocationChart(locationData);
             this.updateServiceChart(serviceData);
             this.updateTahuChart(tahuData);
-            this.updateLocationBarChart(locationData, period, customStartDate, customEndDate);
-            this.updateSourceBarChart(tahuData, period, customStartDate, customEndDate);
+            await this.updateLocationBarChart(locationData, period, customStartDate, customEndDate);
+            await this.updateSourceBarChart(tahuData, period, customStartDate, customEndDate);
             this.updateRecentTable(recentData);
             this.updateMap(mapData);
 
@@ -458,7 +458,7 @@ class DashboardEnhanced {
                     break;
                 case 'all':
                     startDate = new Date(0); // January 1, 1970
-                    endDate = new Date();
+                    endDate = new Date('2099-12-31'); // Far future date to include all data
                     endDate.setHours(23, 59, 59, 999);
                     break;
                 default:
@@ -950,7 +950,7 @@ class DashboardEnhanced {
         });
     }
 
-    updateLocationBarChart(data, period = 'month', customStartDate = null, customEndDate = null) {
+    async updateLocationBarChart(data, period = 'month', customStartDate = null, customEndDate = null) {
         const ctx = document.createElement('canvas');
         const container = document.getElementById('locationBarChartContainer');
         
@@ -964,7 +964,7 @@ class DashboardEnhanced {
         }
 
         // Group data by period for trend analysis (same as source bar chart)
-        const periodData = this.groupDataByPeriod(data, 'lokasi', period, customStartDate, customEndDate);
+        const periodData = await this.groupDataByPeriod(data, 'lokasi', period, customStartDate, customEndDate);
         const labels = periodData.labels;
         const datasets = periodData.datasets;
 
@@ -1020,7 +1020,7 @@ class DashboardEnhanced {
         });
     }
 
-    updateSourceBarChart(data, period = 'month', customStartDate = null, customEndDate = null) {
+    async updateSourceBarChart(data, period = 'month', customStartDate = null, customEndDate = null) {
         const ctx = document.createElement('canvas');
         const container = document.getElementById('sourceBarChartContainer');
         
@@ -1034,7 +1034,7 @@ class DashboardEnhanced {
         }
 
         // Group data by period for trend analysis
-        const periodData = this.groupDataByPeriod(data, 'tahu', period, customStartDate, customEndDate);
+        const periodData = await this.groupDataByPeriod(data, 'tahu', period, customStartDate, customEndDate);
         const labels = periodData.labels;
         const datasets = periodData.datasets;
 
@@ -1090,20 +1090,28 @@ class DashboardEnhanced {
         });
     }
 
-    groupDataByPeriod(data, dataKey, period = 'month', customStartDate = null, customEndDate = null) {
+    async groupDataByPeriod(data, dataKey, period = 'month', customStartDate = null, customEndDate = null) {
+        // Get the original registration data with dates to create accurate trend data
+        const registrations = await getPendaftaran();
+        const allData = registrations.data || registrations;
+        
+        console.log('groupDataByPeriod debug:');
+        console.log('- All registration data count:', allData.length);
+        console.log('- Period:', period);
+        console.log('- Data key:', dataKey);
+        
         const now = new Date();
         let labels = [];
-        let dataPoints = 0;
         let intervalType = '';
+        let startDate, endDate;
         
-        // Determine labels and data points based on period
+        // Determine date range and interval based on period
         if (period === 'custom' && customStartDate && customEndDate) {
-            const startDate = new Date(customStartDate);
-            const endDate = new Date(customEndDate);
+            startDate = new Date(customStartDate);
+            endDate = new Date(customEndDate);
             const daysDiff = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
             
             if (daysDiff <= 14) {
-                // For periods up to 2 weeks, show daily with dates
                 intervalType = 'days';
                 const currentDate = new Date(startDate);
                 while (currentDate <= endDate) {
@@ -1111,7 +1119,6 @@ class DashboardEnhanced {
                     currentDate.setDate(currentDate.getDate() + 1);
                 }
             } else if (daysDiff <= 90) {
-                // For periods up to 3 months, show daily with limited dates for readability
                 intervalType = 'days';
                 const currentDate = new Date(startDate);
                 const allDates = [];
@@ -1119,10 +1126,8 @@ class DashboardEnhanced {
                     allDates.push(currentDate.toLocaleDateString('id-ID', { day: '2-digit', month: 'short' }));
                     currentDate.setDate(currentDate.getDate() + 1);
                 }
-                // Show every 7th day for readability or first/last
                 labels = allDates.filter((_, index) => index % 7 === 0 || index === allDates.length - 1);
             } else {
-                // For longer periods, show monthly
                 intervalType = 'months';
                 const currentDate = new Date(startDate.getFullYear(), startDate.getMonth(), 1);
                 const endMonth = new Date(endDate.getFullYear(), endDate.getMonth(), 1);
@@ -1134,8 +1139,11 @@ class DashboardEnhanced {
         } else {
             switch(period) {
                 case 'week':
-                    dataPoints = 7;
                     intervalType = 'days';
+                    startDate = new Date(now);
+                    startDate.setDate(now.getDate() - 6);
+                    endDate = new Date(now);
+                    
                     for (let i = 6; i >= 0; i--) {
                         const date = new Date(now);
                         date.setDate(now.getDate() - i);
@@ -1143,36 +1151,65 @@ class DashboardEnhanced {
                     }
                     break;
                 case 'month':
-                    dataPoints = 30;
                     intervalType = 'days';
+                    startDate = new Date(now);
+                    startDate.setDate(now.getDate() - 29);
+                    endDate = new Date(now);
+                    
                     for (let i = 29; i >= 0; i--) {
                         const date = new Date(now);
                         date.setDate(now.getDate() - i);
                         labels.push(date.toLocaleDateString('id-ID', { day: '2-digit', month: 'short' }));
                     }
-                    // Limit to show only every 5th day for readability
                     labels = labels.filter((_, index) => index % 5 === 0 || index === labels.length - 1);
                     break;
                 case 'year':
-                    dataPoints = 12;
                     intervalType = 'months';
+                    startDate = new Date(now.getFullYear(), 0, 1);
+                    endDate = new Date(now);
+                    
                     for (let i = 11; i >= 0; i--) {
                         const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
                         labels.push(date.toLocaleDateString('id-ID', { month: 'short', year: 'numeric' }));
                     }
                     break;
                 case 'all':
-                    dataPoints = 12;
                     intervalType = 'months';
-                    for (let i = 11; i >= 0; i--) {
-                        const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
-                        labels.push(date.toLocaleDateString('id-ID', { month: 'short', year: 'numeric' }));
+                    const dates = allData.map(item => new Date(item.tanggal || item.created_at)).filter(d => !isNaN(d));
+                    if (dates.length > 0) {
+                        const earliestDate = new Date(Math.min(...dates));
+                        const latestDate = new Date(Math.max(...dates));
+                        
+                        startDate = new Date(earliestDate.getFullYear(), earliestDate.getMonth(), 1);
+                        // Ensure endDate covers the latest data month completely
+                        endDate = new Date(latestDate.getFullYear(), latestDate.getMonth() + 1, 1);
+                        
+                        const monthsBetween = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24 * 30));
+                        console.log(`Date range for 'all': ${startDate.toISOString()} to ${endDate.toISOString()}, months: ${monthsBetween}`);
+                        console.log(`Latest data date: ${latestDate.toISOString()}`);
+                        
+                        // Generate labels for all months that contain data
+                        const currentDate = new Date(startDate);
+                        while (currentDate < endDate) {
+                            labels.push(currentDate.toLocaleDateString('id-ID', { month: 'short', year: 'numeric' }));
+                            currentDate.setMonth(currentDate.getMonth() + 1);
+                        }
+                    } else {
+                        // Fallback if no valid dates found
+                        startDate = new Date(now.getFullYear(), 0, 1);
+                        endDate = new Date(now);
+                        
+                        for (let i = 11; i >= 0; i--) {
+                            const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
+                            labels.push(date.toLocaleDateString('id-ID', { month: 'short', year: 'numeric' }));
+                        }
                     }
                     break;
                 default:
-                    // Default to last 6 months
-                    dataPoints = 6;
                     intervalType = 'months';
+                    startDate = new Date(now.getFullYear(), now.getMonth() - 5, 1);
+                    endDate = new Date(now);
+                    
                     for (let i = 5; i >= 0; i--) {
                         const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
                         labels.push(date.toLocaleDateString('id-ID', { month: 'short', year: 'numeric' }));
@@ -1180,8 +1217,41 @@ class DashboardEnhanced {
             }
         }
 
-        // Create datasets for each location/source type
-        const serviceTypes = [...new Set(data.map(item => item[dataKey]))];
+        // Filter data based on the determined date range
+        const { startDate: filterStart, endDate: filterEnd } = this.getDateRange(period, customStartDate, customEndDate);
+        
+        // Don't double filter - use all data and let period calculation handle the filtering
+        const dataToUse = allData;
+        
+        console.log('- Filter start date:', filterStart);
+        console.log('- Filter end date:', filterEnd);
+        console.log('- Labels:', labels);
+
+        // Get all unique service types from ALL data, not just filtered data
+        const allServiceTypes = [...new Set(allData.map(item => {
+            return dataKey === 'lokasi' ? 
+                (item.status_lokasi?.nama || 'Unknown') : 
+                (item.tahu_layanan?.nama || 'Unknown');
+        }))];
+        
+        console.log('- All service types found:', allServiceTypes);
+        
+        // Debug: Check each data item to see why some might be missing
+        console.log('- Checking all data items:');
+        allData.forEach((item, index) => {
+            const itemDate = new Date(item.created_at || item.tanggal || item.date);
+            const itemType = dataKey === 'lokasi' ? 
+                (item.status_lokasi?.nama || 'Unknown') : 
+                (item.tahu_layanan?.nama || 'Unknown');
+            const inFilterRange = itemDate >= filterStart && itemDate <= filterEnd;
+            
+            console.log(`Item ${index + 1}: Date=${itemDate.toISOString().split('T')[0]}, Type=${itemType}, InRange=${inFilterRange}`);
+            
+            if (!inFilterRange) {
+                console.log(`  ⚠️ Item ${index + 1} excluded by date filter`);
+            }
+        });
+        
         const colors = [
             'rgba(105, 108, 255, 0.8)',
             'rgba(3, 195, 236, 0.8)',
@@ -1191,26 +1261,78 @@ class DashboardEnhanced {
             'rgba(133, 146, 163, 0.8)'
         ];
 
-        const datasets = serviceTypes.map((type, index) => {
-            // For different periods, distribute current data across time points
-            let periodValues;
+        const datasets = allServiceTypes.map((type, index) => {
+            const periodValues = [];
             
-            if (period === 'custom') {
-                // For custom period, evenly distribute data
-                const typeTotal = data.find(item => item[dataKey] === type)?.total || 0;
-                periodValues = labels.map(() => Math.floor(typeTotal / labels.length) + Math.floor(Math.random() * 3));
-            } else if (period === 'week') {
-                // For week, show simple distribution across 7 days
-                const typeTotal = data.find(item => item[dataKey] === type)?.total || 0;
-                periodValues = labels.map(() => Math.floor(typeTotal / 7) + Math.floor(Math.random() * 3));
-            } else if (period === 'month' && intervalType === 'days') {
-                // For month, show daily distribution
-                const typeTotal = data.find(item => item[dataKey] === type)?.total || 0;
-                periodValues = labels.map(() => Math.floor(typeTotal / labels.length) + Math.floor(Math.random() * 2));
-            } else {
-                // For year/all or month periods, simulate monthly data
-                periodValues = labels.map(() => Math.floor(Math.random() * 15) + 2);
-            }
+            // For each label (time period), count actual data
+            labels.forEach((label, labelIndex) => {
+                let periodStart, periodEnd;
+                
+                if (intervalType === 'days') {
+                    if (period === 'custom') {
+                        periodStart = new Date(startDate);
+                        periodStart.setDate(startDate.getDate() + labelIndex);
+                        periodEnd = new Date(periodStart);
+                        periodEnd.setDate(periodEnd.getDate() + 1);
+                    } else if (period === 'week') {
+                        periodStart = new Date(now);
+                        periodStart.setDate(now.getDate() - (6 - labelIndex));
+                        periodEnd = new Date(periodStart);
+                        periodEnd.setDate(periodEnd.getDate() + 1);
+                    } else { // month
+                        const dayOffset = period === 'month' ? (29 - labelIndex * 5) : labelIndex;
+                        periodStart = new Date(now);
+                        periodStart.setDate(now.getDate() - dayOffset);
+                        periodEnd = new Date(periodStart);
+                        periodEnd.setDate(periodEnd.getDate() + 1);
+                    }
+                } else { // months
+                    if (period === 'year') {
+                        periodStart = new Date(now.getFullYear(), now.getMonth() - (11 - labelIndex), 1);
+                        periodEnd = new Date(now.getFullYear(), now.getMonth() - (11 - labelIndex) + 1, 1);
+                    } else { // all or default
+                        if (period === 'all') {
+                            // For 'all' period, calculate based on actual label position from start date
+                            const monthsFromStart = labelIndex;
+                            periodStart = new Date(startDate);
+                            periodStart.setMonth(startDate.getMonth() + monthsFromStart);
+                            periodEnd = new Date(periodStart);
+                            periodEnd.setMonth(periodEnd.getMonth() + 1);
+                        } else {
+                            // For default period
+                            const monthOffset = labels.length - 1 - labelIndex;
+                            periodStart = new Date(now.getFullYear(), now.getMonth() - monthOffset, 1);
+                            periodEnd = new Date(now.getFullYear(), now.getMonth() - monthOffset + 1, 1);
+                        }
+                    }
+                }
+                
+                periodStart.setHours(0, 0, 0, 0);
+                periodEnd.setHours(0, 0, 0, 0);
+                
+                // Count actual registrations for this type in this period AND within the filter range
+                const count = dataToUse.filter(item => {
+                    const itemDate = new Date(item.created_at || item.tanggal || item.date);
+                    itemDate.setHours(0, 0, 0, 0);
+                    
+                    // Check if this item matches the current service type
+                    const itemType = dataKey === 'lokasi' ? 
+                        (item.status_lokasi?.nama || 'Unknown') : 
+                        (item.tahu_layanan?.nama || 'Unknown');
+                    
+                    // Check if item is within both the period AND the filter range
+                    const inPeriod = itemDate >= periodStart && itemDate < periodEnd;
+                    const inFilterRange = itemDate >= filterStart && itemDate <= filterEnd;
+                    const typeMatches = itemType === type;
+                    
+                    return typeMatches && inPeriod && inFilterRange;
+                }).length;
+                
+                periodValues.push(count);
+            });
+            
+            const totalForType = periodValues.reduce((sum, val) => sum + val, 0);
+            console.log(`Service type "${type}" total count: ${totalForType}`);
             
             return {
                 label: type,
@@ -1222,6 +1344,12 @@ class DashboardEnhanced {
                 borderSkipped: false
             };
         });
+
+        const grandTotal = datasets.reduce((total, dataset) => {
+            return total + dataset.data.reduce((sum, val) => sum + val, 0);
+        }, 0);
+        
+        console.log('Grand total across all datasets:', grandTotal);
 
         return {
             labels: labels,
