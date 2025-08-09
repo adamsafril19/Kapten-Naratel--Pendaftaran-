@@ -1,3 +1,4 @@
+<?php require_once 'require_auth.php'; ?>
 <?php
 ob_start();
 ?>
