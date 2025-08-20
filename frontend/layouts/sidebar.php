@@ -101,6 +101,12 @@
         <div>Alasan</div>
       </a>
     </li>
+    <li class="menu-item<?= $current === 'aktivitasPembayaran.php' ? ' active' : '' ?>">
+      <a href="aktivitasPembayaran.php" class="menu-link">
+        <i class="menu-icon icon-base bx bx-bar-chart"></i>
+        <div>Aktifitas Pembayaran</div>
+      </a>
+    </li>
     <li class="menu-item">
       <a href="../logout.php" class="menu-link">
         <i class="menu-icon icon-base bx bx-power-off"></i>

@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://localhost:8001'; // sesuaikan jika berbeda
+const API_BASE_URL = "http://localhost:8001"; // sesuaikan jika berbeda
 
 // ==============================
 // REGISTRASI
@@ -21,8 +21,8 @@ export async function getPendaftaranById(id) {
 // POST /registrasi
 export async function createPendaftaran(data) {
   const res = await fetch(`${API_BASE_URL}/registrasi`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
   });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -32,8 +32,8 @@ export async function createPendaftaran(data) {
 // PUT /registrasi/{id}
 export async function updatePendaftaran(id, data) {
   const res = await fetch(`${API_BASE_URL}/registrasi/update/${id}`, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
   });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -43,12 +43,11 @@ export async function updatePendaftaran(id, data) {
 // DELETE /registrasi/{id}
 export async function deletePendaftaran(id) {
   const res = await fetch(`${API_BASE_URL}/registrasi/${id}`, {
-    method: 'DELETE',
+    method: "DELETE",
   });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   return res.json();
 }
-
 
 // ==============================
 // STATUS LOKASI
@@ -68,8 +67,8 @@ export async function getStatusLokasiById(id) {
 
 export async function createStatusLokasi(data) {
   const res = await fetch(`${API_BASE_URL}/status-lokasi`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
   });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -78,8 +77,8 @@ export async function createStatusLokasi(data) {
 
 export async function updateStatusLokasi(id, data) {
   const res = await fetch(`${API_BASE_URL}/status-lokasi/update/${id}`, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
   });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -88,12 +87,11 @@ export async function updateStatusLokasi(id, data) {
 
 export async function deleteStatusLokasi(id) {
   const res = await fetch(`${API_BASE_URL}/status-lokasi/${id}`, {
-    method: 'DELETE',
+    method: "DELETE",
   });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   return res.json();
 }
-
 
 // ==============================
 // SOBAT
@@ -113,8 +111,8 @@ export async function getSobatById(id) {
 
 export async function createSobat(data) {
   const res = await fetch(`${API_BASE_URL}/sobat`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
   });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -124,8 +122,8 @@ export async function createSobat(data) {
 // Sobat update via POST /sobat/{id}
 export async function updateSobat(id, data) {
   const res = await fetch(`${API_BASE_URL}/sobat/update/${id}`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
   });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -134,12 +132,11 @@ export async function updateSobat(id, data) {
 
 export async function deleteSobat(id) {
   const res = await fetch(`${API_BASE_URL}/sobat/${id}`, {
-    method: 'DELETE',
+    method: "DELETE",
   });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   return res.json();
 }
-
 
 // ==============================
 // TAHU LAYANAN
@@ -159,8 +156,8 @@ export async function getTahuLayananById(id) {
 
 export async function createTahuLayanan(data) {
   const res = await fetch(`${API_BASE_URL}/tahu-layanan`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
   });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -169,8 +166,8 @@ export async function createTahuLayanan(data) {
 
 export async function updateTahuLayanan(id, data) {
   const res = await fetch(`${API_BASE_URL}/tahu-layanan/update/${id}`, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
   });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -179,12 +176,11 @@ export async function updateTahuLayanan(id, data) {
 
 export async function deleteTahuLayanan(id) {
   const res = await fetch(`${API_BASE_URL}/tahu-layanan/${id}`, {
-    method: 'DELETE',
+    method: "DELETE",
   });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   return res.json();
 }
-
 
 // ==============================
 // LAYANAN DIGUNAKAN
@@ -204,8 +200,8 @@ export async function getLayananDigunakanById(id) {
 
 export async function createLayananDigunakan(data) {
   const res = await fetch(`${API_BASE_URL}/layanan-digunakan`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
   });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -214,8 +210,8 @@ export async function createLayananDigunakan(data) {
 
 export async function updateLayananDigunakan(id, data) {
   const res = await fetch(`${API_BASE_URL}/layanan-digunakan/update/${id}`, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
   });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -224,12 +220,11 @@ export async function updateLayananDigunakan(id, data) {
 
 export async function deleteLayananDigunakan(id) {
   const res = await fetch(`${API_BASE_URL}/layanan-digunakan/${id}`, {
-    method: 'DELETE',
+    method: "DELETE",
   });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   return res.json();
 }
-
 
 // ==============================
 // ALASAN
@@ -249,8 +244,8 @@ export async function getAlasanById(id) {
 
 export async function createAlasan(data) {
   const res = await fetch(`${API_BASE_URL}/alasan`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
   });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -259,8 +254,8 @@ export async function createAlasan(data) {
 
 export async function updateAlasan(id, data) {
   const res = await fetch(`${API_BASE_URL}/alasan/update/${id}`, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
   });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -269,8 +264,21 @@ export async function updateAlasan(id, data) {
 
 export async function deleteAlasan(id) {
   const res = await fetch(`${API_BASE_URL}/alasan/${id}`, {
-    method: 'DELETE',
+    method: "DELETE",
   });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return res.json();
+}
+
+// ==============================
+// PAYMENT ACTIVITY (EXTEND REPORT)
+// ==============================
+
+// GET payment activity by month and year via local proxy
+export async function getPaymentActivity(bulan, tahun) {
+  const res = await fetch(
+    `${API_BASE_URL}/payment-activity?bulan=${bulan}&tahun=${tahun}`
+  );
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   return res.json();
 }
