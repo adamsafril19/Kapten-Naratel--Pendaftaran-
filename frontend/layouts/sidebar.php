@@ -43,6 +43,60 @@
   pointer-events: none;
   transition: opacity 0.2s ease, transform 0.2s ease;
 }
+
+/* Dropdown Menu Styles */
+.menu-sub {
+  padding-left: 0;
+  margin-left: 0;
+  overflow: hidden;
+  display: none; /* Hidden by default */
+}
+
+.menu-item.open .menu-sub {
+  display: block; /* Show when parent is open */
+}
+
+.menu-sub .menu-item .menu-link {
+  padding-left: 3.5rem;
+  font-size: 0.9rem;
+  color: #697a8d;
+  transition: all 0.2s ease;
+}
+
+.menu-sub .menu-item.active .menu-link {
+  background-color: rgba(105, 108, 255, 0.1);
+  color: #696cff;
+  font-weight: 500;
+  border-right: 2px solid #696cff;
+}
+
+.menu-sub .menu-item .menu-link:hover {
+  background-color: rgba(105, 108, 255, 0.04);
+  color: #696cff;
+}
+
+/* Menu toggle arrow */
+.menu-toggle {
+  position: relative;
+}
+
+.menu-toggle::after {
+  content: "";
+  position: absolute;
+  right: 1.5rem;
+  top: 50%;
+  transform: translateY(-50%) rotate(0deg);
+  width: 0;
+  height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 6px solid #a8b1bb;
+  transition: transform 0.3s ease;
+}
+
+.menu-item.open .menu-toggle::after {
+  transform: translateY(-50%) rotate(180deg);
+}
 </style>
 
 <aside id="layout-menu" class="layout-menu menu-vertical menu">
@@ -65,47 +119,49 @@
   <div class="menu-inner-shadow"></div>
 
   <ul class="menu-inner py-1">
-    <li class="menu-item<?= $current === 'dashboard.php' ? ' active' : '' ?>">
-      <a href="dashboard.php" class="menu-link">
-        <i class="menu-icon icon-base bx bx-home"></i>
-        <div>Dashboard</div>
+    <!-- Dropdown Menu untuk Manajemen Data -->
+    <li class="menu-item<?= in_array($current, ['dashboard.php', 'pendaftar.php', 'statusLokasi.php', 'layananDigunakan.php', 'tahuLayanan.php', 'alasan.php', 'aktivitasPembayaran.php']) ? ' active open' : '' ?>">
+      <a href="javascript:void(0);" class="menu-link menu-toggle">
+        <i class="menu-icon icon-base bx bx-collection"></i>
+        <div>Manajemen Data</div>
       </a>
-    </li>
-    <li class="menu-item<?= $current === 'pendaftar.php' ? ' active' : '' ?>">
-      <a href="pendaftar.php" class="menu-link">
-        <i class="menu-icon icon-base bx bx-user-check"></i>
-        <div>Data Pendaftar</div>
-      </a>
-    </li>
-    <li class="menu-item<?= $current === 'statusLokasi.php' ? ' active' : '' ?>">
-      <a href="statusLokasi.php" class="menu-link">
-        <i class="menu-icon icon-base bx bx-map"></i>
-        <div>Status Lokasi</div>
-      </a>
-    </li>
-    <li class="menu-item<?= $current === 'layananDigunakan.php' ? ' active' : '' ?>">
-      <a href="layananDigunakan.php" class="menu-link">
-        <i class="menu-icon icon-base bx bx-conversation"></i>
-        <div>Layanan</div>
-      </a>
-    </li>
-    <li class="menu-item<?= $current === 'tahuLayanan.php' ? ' active' : '' ?>">
-      <a href="tahuLayanan.php" class="menu-link">
-        <i class="menu-icon icon-base bx bx-question-mark"></i>
-        <div>Tahu Layanan</div>
-      </a>
-    </li>
-    <li class="menu-item<?= $current === 'alasan.php' ? ' active' : '' ?>">
-      <a href="alasan.php" class="menu-link">
-        <i class="menu-icon icon-base bx bx-comment-dots"></i>
-        <div>Alasan</div>
-      </a>
-    </li>
-    <li class="menu-item<?= $current === 'aktivitasPembayaran.php' ? ' active' : '' ?>">
-      <a href="aktivitasPembayaran.php" class="menu-link">
-        <i class="menu-icon icon-base bx bx-bar-chart"></i>
-        <div>Aktifitas Pembayaran</div>
-      </a>
+      <ul class="menu-sub">
+        <li class="menu-item<?= $current === 'dashboard.php' ? ' active' : '' ?>">
+          <a href="dashboard.php" class="menu-link">
+            <div>Dashboard</div>
+          </a>
+        </li>
+        <li class="menu-item<?= $current === 'pendaftar.php' ? ' active' : '' ?>">
+          <a href="pendaftar.php" class="menu-link">
+            <div>Data Pendaftar</div>
+          </a>
+        </li>
+        <li class="menu-item<?= $current === 'statusLokasi.php' ? ' active' : '' ?>">
+          <a href="statusLokasi.php" class="menu-link">
+            <div>Status Lokasi</div>
+          </a>
+        </li>
+        <li class="menu-item<?= $current === 'layananDigunakan.php' ? ' active' : '' ?>">
+          <a href="layananDigunakan.php" class="menu-link">
+            <div>Layanan</div>
+          </a>
+        </li>
+        <li class="menu-item<?= $current === 'tahuLayanan.php' ? ' active' : '' ?>">
+          <a href="tahuLayanan.php" class="menu-link">
+            <div>Tahu Layanan</div>
+          </a>
+        </li>
+        <li class="menu-item<?= $current === 'alasan.php' ? ' active' : '' ?>">
+          <a href="alasan.php" class="menu-link">
+            <div>Alasan</div>
+          </a>
+        </li>
+        <li class="menu-item<?= $current === 'aktivitasPembayaran.php' ? ' active' : '' ?>">
+          <a href="aktivitasPembayaran.php" class="menu-link">
+            <div>Aktifitas Pendaftaran</div>
+          </a>
+        </li>
+      </ul>
     </li>
     <li class="menu-item">
       <a href="../logout.php" class="menu-link">
@@ -116,9 +172,58 @@
   </ul>
 </aside>
 
-<div class="menu-mobile-toggler d-xl-none rounded-1">k
+<div class="menu-mobile-toggler d-xl-none rounded-1">
   <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large text-bg-secondary p-2 rounded-1">
     <i class="bx bx-menu icon-base"></i>
     <i class="bx bx-chevron-right icon-base"></i>
   </a>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  console.log('DOM loaded, initializing dropdown menu...');
+  
+  // Toggle dropdown menu
+  const menuToggle = document.querySelector('.menu-toggle');
+  
+  if (menuToggle) {
+    console.log('Menu toggle found');
+    const menuItem = menuToggle.closest('.menu-item');
+    const menuSub = menuItem.querySelector('.menu-sub');
+    
+    console.log('Menu item:', menuItem);
+    console.log('Menu sub:', menuSub);
+    
+    // Set initial state - open if any submenu is active
+    if (menuItem.classList.contains('open')) {
+      menuSub.style.display = 'block';
+      console.log('Initial state: open');
+    } else {
+      menuSub.style.display = 'none';
+      console.log('Initial state: closed');
+    }
+    
+    menuToggle.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      console.log('Menu toggle clicked');
+      console.log('Current open state:', menuItem.classList.contains('open'));
+      
+      if (menuItem.classList.contains('open')) {
+        // Close menu
+        menuItem.classList.remove('open');
+        menuSub.style.display = 'none';
+        console.log('Menu closed');
+      } else {
+        // Open menu
+        menuItem.classList.add('open');
+        menuSub.style.display = 'block';
+        console.log('Menu opened');
+      }
+    });
+  } else {
+    console.log('Menu toggle not found!');
+  }
+});
+</script>
