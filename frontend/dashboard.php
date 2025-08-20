@@ -129,11 +129,10 @@ ob_start(); // mulai tangkap output
                             </div>
                         </div>
 
-                        <!-- Bagian Grafik -->
+                        <!-- Grafik Tren Pendaftaran - Full Width -->
                         <div class="row g-4 mb-4">
-                            <!-- Grafik Tren -->
-                            <div class="col-lg-8">
-                                <div class="card h-100">
+                            <div class="col-12">
+                                <div class="card">
                                     <div class="card-header d-flex justify-content-between align-items-center">
                                         <h5 class="mb-0">Tren Pendaftaran</h5>
                                         <div class="dropdown">
@@ -153,58 +152,15 @@ ob_start(); // mulai tangkap output
                                     </div>
                                 </div>
                             </div>
-
-                            <!-- Distribusi Lokasi -->
-                            <div class="col-lg-4">
-                                <div class="card h-100">
-                                    <div class="card-header">
-                                        <h5 class="mb-0">Distribusi Lokasi</h5>
-                                    </div>
-                                    <div class="card-body">
-                                        <div id="locationChartContainer" style="height: 350px;">
-                                            <div class="skeleton-chart"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
 
-                        <!-- Baris Grafik Kedua -->
-                        <div class="row g-4 mb-4">
-                            <!-- Penggunaan Layanan -->
-                            <div class="col-lg-6">
-                                <div class="card h-100">
-                                    <div class="card-header">
-                                        <h5 class="mb-0">Penggunaan Layanan</h5>
-                                    </div>
-                                    <div class="card-body">
-                                        <div id="serviceChartContainer" style="height: 300px;">
-                                            <div class="skeleton-chart"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                        <!-- Baris Grafik Kedua - DIHAPUS -->
+                        <!-- Chart lingkaran Distribusi Lokasi dan Cara Mengetahui telah dihapus -->
 
-                            <!-- Cara Mengetahui -->
-                            <div class="col-lg-6">
-                                <div class="card h-100">
-                                    <div class="card-header">
-                                        <h5 class="mb-0">Cara Mengetahui Kami</h5>
-                                    </div>
-                                    <div class="card-body">
-                                        <div id="tahuChartContainer" style="height: 300px;">
-                                            <div class="skeleton-chart"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Grafik Batang Analitik -->
+                        <!-- Grafik Batang Distribusi Lokasi - Full Width -->
                         <div class="row g-4 mb-4">
-                            <!-- Grafik Batang Distribusi Lokasi -->
-                            <div class="col-lg-6">
-                                <div class="card h-100">
+                            <div class="col-12">
+                                <div class="card">
                                     <div class="card-header d-flex justify-content-between align-items-center">
                                         <h5 class="mb-0">Distribusi Lokasi</h5>
                                         <div class="dropdown">
@@ -224,10 +180,12 @@ ob_start(); // mulai tangkap output
                                     </div>
                                 </div>
                             </div>
+                        </div>
 
-                            <!-- Grafik Batang Sumber Informasi -->
-                            <div class="col-lg-6">
-                                <div class="card h-100">
+                        <!-- Grafik Batang Tren Sumber Informasi - Full Width -->
+                        <div class="row g-4 mb-4">
+                            <div class="col-12">
+                                <div class="card">
                                     <div class="card-header d-flex justify-content-between align-items-center">
                                         <h5 class="mb-0">Tren Sumber Informasi</h5>
                                         <div class="dropdown">
@@ -242,6 +200,31 @@ ob_start(); // mulai tangkap output
                                     </div>
                                     <div class="card-body">
                                         <div id="sourceBarChartContainer" style="height: 350px;">
+                                            <div class="skeleton-chart"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Naraya Line Chart (external API) -->
+                        <div class="row g-4 mb-4">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-header d-flex justify-content-between align-items-center">
+                                        <h5 class="mb-0">Tren Request Unit (Naraya)</h5>
+                                        <div class="dropdown">
+                                            <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                                <i class="bx bx-download"></i>
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li><a class="dropdown-item" href="#" onclick="downloadChart('narayaChart', 'png')">Unduh PNG</a></li>
+                                                <li><a class="dropdown-item" href="#" onclick="downloadChart('narayaChart', 'pdf')">Unduh PDF</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div id="narayaLineChartContainer" style="height: 350px;">
                                             <div class="skeleton-chart"></div>
                                         </div>
                                     </div>

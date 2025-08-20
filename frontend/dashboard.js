@@ -176,7 +176,6 @@ class DashboardEnhanced {
                 kpiData,
                 trendData,
                 locationData,
-                serviceData,
                 tahuData,
                 recentData,
                 mapData
@@ -184,7 +183,6 @@ class DashboardEnhanced {
                 this.loadKPIData(period, customStartDate, customEndDate),
                 this.loadTrendData(period, customStartDate, customEndDate),
                 this.loadLocationData(period, customStartDate, customEndDate),
-                this.loadServiceData(period, customStartDate, customEndDate),
                 this.loadTahuData(period, customStartDate, customEndDate),
                 this.loadRecentData(period, customStartDate, customEndDate),
                 this.loadMapData()
@@ -194,11 +192,11 @@ class DashboardEnhanced {
 
             this.updateKPICards(kpiData);
             this.updateTrendChart(trendData);
-            this.updateLocationChart(locationData);
-            this.updateServiceChart(serviceData);
-            this.updateTahuChart(tahuData);
+            // Chart lingkaran dihapus - updateLocationChart dan updateServiceChart
             await this.updateLocationBarChart(locationData, period, customStartDate, customEndDate);
             await this.updateSourceBarChart(tahuData, period, customStartDate, customEndDate);
+            // Load external Naraya line chart
+            await this.loadNarayaChart(period, customStartDate, customEndDate);
             this.updateRecentTable(recentData);
             this.updateMap(mapData);
 
@@ -498,31 +496,7 @@ class DashboardEnhanced {
         return Object.entries(groups).map(([lokasi, total]) => ({ lokasi, total }));
     }
 
-    async loadServiceData(period, customStartDate = null, customEndDate = null) {
-        const regs = (await getPendaftaran()).data || (await getPendaftaran());
-        
-        // Filter data based on period if provided
-        let filteredData = regs;
-        
-        if (period && period !== 'all') {
-            const { startDate, endDate } = this.getDateRange(period, customStartDate, customEndDate);
-            
-            filteredData = regs.filter(item => {
-                const itemDate = new Date(item.created_at || item.tanggal || item.date);
-                return itemDate >= startDate && itemDate <= endDate;
-            });
-        }
-        
-        // hitung jumlah per layanan_digunakan.nama
-        const counts = filteredData.reduce((acc, cur) => {
-            const name = cur.layanan_digunakan?.nama || 'Unknown';
-            acc[name] = (acc[name] || 0) + 1;
-            return acc;
-        }, {});
-        // kembalikan array dengan properti sesuai updateServiceChart
-        return Object.entries(counts)
-            .map(([layanan, total]) => ({ layanan, total }));
-    }
+    // Fungsi loadServiceData dihapus karena chart Penggunaan Layanan dihapus
 
     async loadTahuData(period, customStartDate = null, customEndDate = null) {
         const regs = (await getPendaftaran()).data || (await getPendaftaran());
@@ -757,198 +731,8 @@ class DashboardEnhanced {
         });
     }
 
-    updateLocationChart(data) {
-        const ctx = document.createElement('canvas');
-        const container = document.getElementById('locationChartContainer');
-        
-        if (!container) return;
-        
-        container.innerHTML = '';
-        container.appendChild(ctx);
-
-        if (this.charts.location) {
-            this.charts.location.destroy();
-        }
-
-        const labels = data.map(item => item.lokasi);
-        const values = data.map(item => item.total);
-
-        this.charts.location = new Chart(ctx, {
-            type: 'doughnut',
-            data: {
-                labels: labels,
-                datasets: [{
-                    data: values,
-                    backgroundColor: [
-                        '#696cff',
-                        '#03c3ec',
-                        '#71dd37',
-                        '#ffab00',
-                        '#ff3e1d',
-                        '#8592a3'
-                    ],
-                    borderWidth: 0,
-                    hoverOffset: 4
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: {
-                            padding: 20,
-                            usePointStyle: true,
-                            font: {
-                                size: 12
-                            }
-                        }
-                    },
-                    tooltip: {
-                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                        titleColor: '#fff',
-                        bodyColor: '#fff',
-                        cornerRadius: 8,
-                        callbacks: {
-                            label: function(context) {
-                                const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                                const percentage = ((context.parsed / total) * 100).toFixed(1);
-                                return `${context.label}: ${context.parsed} (${percentage}%)`;
-                            }
-                        }
-                    }
-                }
-            }
-        });
-    }
-
-    updateServiceChart(data) {
-        const ctx = document.createElement('canvas');
-        const container = document.getElementById('serviceChartContainer');
-        
-        if (!container) return;
-        
-        container.innerHTML = '';
-        container.appendChild(ctx);
-
-        if (this.charts.service) {
-            this.charts.service.destroy();
-        }
-
-        const labels = data.map(item => item.layanan);
-        const values = data.map(item => item.total);
-
-        this.charts.service = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Usage',
-                    data: values,
-                    backgroundColor: 'rgba(105, 108, 255, 0.8)',
-                    borderColor: '#696cff',
-                    borderWidth: 1,
-                    borderRadius: 4,
-                    borderSkipped: false
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: false
-                    },
-                    tooltip: {
-                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                        titleColor: '#fff',
-                        bodyColor: '#fff',
-                        cornerRadius: 8
-                    }
-                },
-                scales: {
-                    x: {
-                        grid: {
-                            display: false
-                        }
-                    },
-                    y: {
-                        beginAtZero: true,
-                        grid: {
-                            color: 'rgba(0, 0, 0, 0.05)'
-                        }
-                    }
-                }
-            }
-        });
-    }
-
-    updateTahuChart(data) {
-        const ctx = document.createElement('canvas');
-        const container = document.getElementById('tahuChartContainer');
-        
-        if (!container) return;
-        
-        container.innerHTML = '';
-        container.appendChild(ctx);
-
-        if (this.charts.tahu) {
-            this.charts.tahu.destroy();
-        }
-
-        const labels = data.map(item => item.tahu);
-        const values = data.map(item => item.total);
-
-        this.charts.tahu = new Chart(ctx, {
-            type: 'polarArea',
-            data: {
-                labels: labels,
-                datasets: [{
-                    data: values,
-                    backgroundColor: [
-                        'rgba(105, 108, 255, 0.8)',
-                        'rgba(3, 195, 236, 0.8)',
-                        'rgba(113, 221, 55, 0.8)',
-                        'rgba(255, 171, 0, 0.8)',
-                        'rgba(255, 62, 29, 0.8)'
-                    ],
-                    borderWidth: 2,
-                    borderColor: '#fff'
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: {
-                            padding: 20,
-                            usePointStyle: true,
-                            font: {
-                                size: 12
-                            }
-                        }
-                    },
-                    tooltip: {
-                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                        titleColor: '#fff',
-                        bodyColor: '#fff',
-                        cornerRadius: 8
-                    }
-                },
-                scales: {
-                    r: {
-                        beginAtZero: true,
-                        grid: {
-                            color: 'rgba(0, 0, 0, 0.05)'
-                        }
-                    }
-                }
-            }
-        });
-    }
+    // Fungsi chart lingkaran dihapus - updateLocationChart, updateServiceChart, updateTahuChart
+    // Chart bar full-width digunakan sebagai gantinya
 
     async updateLocationBarChart(data, period = 'month', customStartDate = null, customEndDate = null) {
         const ctx = document.createElement('canvas');
@@ -1088,6 +872,192 @@ class DashboardEnhanced {
                 }
             }
         });
+    }
+
+    // Mengambil data chart Naraya dari API eksternal melalui proxy lokal
+    async loadNarayaChart(period = 'month', customStartDate = null, customEndDate = null) {
+        const container = document.getElementById('narayaLineChartContainer');
+        if (!container) return;
+        container.innerHTML = '';
+        const canvas = document.createElement('canvas');
+        container.appendChild(canvas);
+
+        try {
+            // Coba menggunakan proxy lokal terlebih dahulu
+            let resp;
+            let payload;
+            
+            try {
+                console.log('Mencoba menggunakan proxy lokal...');
+                resp = await fetch('http://localhost:8001/naraya-report?bulan=8&tahun=2025');
+                if (!resp.ok) throw new Error('Proxy tidak tersedia');
+                payload = await resp.json();
+                console.log('Berhasil menggunakan proxy lokal');
+            } catch (proxyError) {
+                console.log('Proxy lokal gagal, mencoba akses langsung ke API...');
+                // Jika proxy gagal, coba akses langsung
+                resp = await fetch('https://wo.naraya.co.id/beta/api/v1/extend_report/?bulan=8&tahun=2025');
+                if (!resp.ok) throw new Error('HTTP ' + resp.status);
+                payload = await resp.json();
+                console.log('Berhasil mengakses API langsung');
+            }
+
+            let rows = payload.data || [];
+            console.log('Data Naraya diterima:', rows.length, 'records');
+
+            // Filter data berdasarkan periode seperti chart lainnya
+            if (period && period !== 'all') {
+                const { startDate, endDate } = this.getDateRange(period, customStartDate, customEndDate);
+                
+                console.log('Filtering Naraya data with period:', period);
+                console.log('Date range:', startDate, 'to', endDate);
+                
+                const filteredRows = rows.filter(item => {
+                    const itemDate = new Date(item.tanggal);
+                    const inRange = itemDate >= startDate && itemDate <= endDate;
+                    
+                    if (!inRange) {
+                        console.log(`Naraya item excluded: ${item.tanggal} (${item.unit})`);
+                    }
+                    
+                    return inRange;
+                });
+                
+                console.log(`Naraya data filtered: ${rows.length} -> ${filteredRows.length} records`);
+                rows = filteredRows;
+            }
+
+            // Agregasi data berdasarkan tanggal per unit
+            const datesSet = new Set();
+            const byUnit = {};
+            rows.forEach(r => {
+                const d = r.tanggal;
+                const u = r.unit || 'Unknown';
+                const v = parseInt(r.total_request, 10) || 0;
+                datesSet.add(d);
+                if (!byUnit[u]) byUnit[u] = {};
+                byUnit[u][d] = (byUnit[u][d] || 0) + v;
+            });
+
+            const dates = Array.from(datesSet).sort();
+            
+            // Format tanggal dari yyyy-mm-dd menjadi dd-mm-yyyy untuk label chart
+            const formattedLabels = dates.map(dateStr => {
+                const date = new Date(dateStr);
+                if (isNaN(date.getTime())) return dateStr; // Fallback jika format tidak valid
+                
+                // Format manual dengan tanda "-" sebagai pemisah
+                const day = String(date.getDate()).padStart(2, '0');
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const year = date.getFullYear();
+                
+                return `${day}-${month}-${year}`;
+            });
+            
+            // Simpan referensi tanggal asli untuk tooltip
+            const originalDates = dates;
+            
+            const colors = ['#696cff','#03c3ec','#71dd37','#ffab00','#ff3e1d','#8592a3','#8e24aa','#43a047'];
+            const datasets = Object.keys(byUnit).map((unit, idx) => ({
+                label: unit,
+                data: dates.map(d => byUnit[unit][d] || 0),
+                borderColor: colors[idx % colors.length],
+                backgroundColor: colors[idx % colors.length] + '33',
+                tension: 0.3,
+                pointRadius: 2,
+                fill: false
+            }));
+
+            // Tambahkan informasi periode di title
+            let periodText = '';
+            switch(period) {
+                case 'week': periodText = ' - Minggu Ini'; break;
+                case 'month': periodText = ' - Bulan Ini'; break;
+                case 'year': periodText = ' - Tahun Ini'; break;
+                case 'custom': 
+                    if (customStartDate && customEndDate) {
+                        const start = new Date(customStartDate).toLocaleDateString('id-ID');
+                        const end = new Date(customEndDate).toLocaleDateString('id-ID');
+                        periodText = ` - ${start} s/d ${end}`;
+                    }
+                    break;
+                case 'all': periodText = ' - Semua Data'; break;
+                default: periodText = ' - Bulan Ini'; break;
+            }
+
+            if (this.charts.naraya) this.charts.naraya.destroy();
+            this.charts.naraya = new Chart(canvas, {
+                type: 'line',
+                data: { labels: formattedLabels, datasets },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { 
+                        legend: { 
+                            position: 'top',
+                            labels: {
+                                usePointStyle: true,
+                                padding: 20
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: `Tren Request Unit (Naraya)${periodText}`
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            titleColor: '#fff',
+                            bodyColor: '#fff',
+                            borderColor: '#696cff',
+                            borderWidth: 1,
+                            cornerRadius: 8,
+                            mode: 'index',
+                            intersect: false,
+                            callbacks: {
+                                title: function(context) {
+                                    // Menampilkan tanggal dalam format lengkap di tooltip
+                                    const originalDate = originalDates[context[0].dataIndex];
+                                    const date = new Date(originalDate);
+                                    return date.toLocaleDateString('id-ID', {
+                                        weekday: 'long',
+                                        day: '2-digit',
+                                        month: 'long', 
+                                        year: 'numeric'
+                                    });
+                                }
+                            }
+                        }
+                    },
+                    interaction: { mode: 'index', intersect: false },
+                    scales: { 
+                        x: { 
+                            title: { display: true, text: 'Tanggal' },
+                            grid: { display: false },
+                            ticks: {
+                                maxTicksLimit: 7
+                            }
+                        }, 
+                        y: { 
+                            beginAtZero: true, 
+                            title: { display: true, text: 'Total Request' },
+                            grid: { color: 'rgba(0, 0, 0, 0.05)' }
+                        } 
+                    }
+                }
+            });
+
+            console.log('Chart Naraya berhasil dimuat dengan', rows.length, 'data points untuk periode', period);
+
+        } catch (err) {
+            console.error('Error memuat chart Naraya:', err);
+            container.innerHTML = `
+                <div class="alert alert-warning" role="alert">
+                    <i class="bx bx-error-circle me-2"></i>
+                    <strong>Gagal memuat data chart Naraya</strong><br>
+                    <small class="text-muted">Periksa koneksi internet atau coba refresh halaman</small>
+                </div>
+            `;
+        }
     }
 
     async groupDataByPeriod(data, dataKey, period = 'month', customStartDate = null, customEndDate = null) {
@@ -1590,12 +1560,16 @@ window.downloadChart = function(chartId, format) {
     const chartMapping = {
         'trendChart': 'trend',
         'locationBarChart': 'locationBar',
-        'sourceBarChart': 'sourceBar'
+        'sourceBarChart': 'sourceBar',
+        'narayaChart': 'naraya'
     };
     
     const actualChartId = chartMapping[chartId] || chartId;
     const chart = window.DashboardEnhanced?.charts[actualChartId];
-    if (!chart) return;
+    if (!chart) {
+        console.warn('Chart tidak ditemukan:', chartId);
+        return;
+    }
 
     const link = document.createElement('a');
     link.download = `${chartId}-${new Date().toISOString().split('T')[0]}.${format}`;
@@ -1604,7 +1578,7 @@ window.downloadChart = function(chartId, format) {
         link.href = chart.toBase64Image();
     } else if (format === 'pdf') {
         // For PDF, we'll use a library like jsPDF in production
-        console.log('PDF download would require jsPDF library');
+        console.log('Download PDF memerlukan library jsPDF');
         return;
     }
     
