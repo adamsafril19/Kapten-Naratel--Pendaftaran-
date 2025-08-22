@@ -30,7 +30,7 @@ $bodyClass = 'payment-activity-page';
         <div class="card-body">
           <div class="d-flex align-items-center">
             <div class="avatar bg-primary me-3">
-              <i class="bx bx-calendar"></i>
+              <i class="bx bx-calendar stat-icon"></i>
             </div>
             <div>
               <h5 class="mb-0" id="totalDays">-</h5>
@@ -45,7 +45,7 @@ $bodyClass = 'payment-activity-page';
         <div class="card-body">
           <div class="d-flex align-items-center">
             <div class="avatar bg-success me-3">
-              <i class="bx bx-trending-up"></i>
+              <i class="bx bx-trending-up stat-icon"></i>
             </div>
             <div>
               <h5 class="mb-0" id="totalRequests">-</h5>
@@ -60,7 +60,7 @@ $bodyClass = 'payment-activity-page';
         <div class="card-body">
           <div class="d-flex align-items-center">
             <div class="avatar bg-warning me-3">
-              <i class="bx bx-building"></i>
+              <i class="bx bx-building stat-icon"></i>
             </div>
             <div>
               <h5 class="mb-0" id="totalUnits">-</h5>
@@ -75,7 +75,7 @@ $bodyClass = 'payment-activity-page';
         <div class="card-body">
           <div class="d-flex align-items-center">
             <div class="avatar bg-info me-3">
-              <i class="bx bx-bar-chart-alt-2"></i>
+              <i class="bx bx-bar-chart-alt-2 stat-icon"></i>
             </div>
             <div>
               <h5 class="mb-0" id="avgRequests">-</h5>
@@ -87,6 +87,26 @@ $bodyClass = 'payment-activity-page';
     </div>
   </div>
 </div>
+
+<style>
+  .avatar {
+    position: relative;
+    border-radius: 0.5rem;
+    width: 3rem;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .stat-icon {
+    font-size: 1.5rem;
+    color: white;
+    transition: transform 0.3s ease;
+  }
+  .stat-icon:hover {
+    transform: scale(1.1);
+  }
+</style>
 
 <!-- Data Table -->
 <div class="card mt-3 shadow-sm border">

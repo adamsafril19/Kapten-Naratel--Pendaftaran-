@@ -158,7 +158,7 @@
         </li>
         <li class="menu-item<?= $current === 'aktivitasPembayaran.php' ? ' active' : '' ?>">
           <a href="aktivitasPembayaran.php" class="menu-link">
-            <div>Aktifitas Pendaftaran</div>
+            <div>Aktifitas Pembayaran</div>
           </a>
         </li>
       </ul>
