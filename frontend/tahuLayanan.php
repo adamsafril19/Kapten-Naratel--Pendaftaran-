@@ -105,7 +105,7 @@ ob_start(); // mulai tangkap output
   </div>
 
 <script type="module">
-  import { getTahuLayanan, getTahuLayananById, createTahuLayanan, updateTahuLayanan, deleteTahuLayanan } from '/api.js';
+  import { getTahuLayanan, getTahuLayananById, createTahuLayanan, updateTahuLayanan, deleteTahuLayanan } from '/api_Pendaftaran.js';
 
   const tableBody = document.getElementById('table-body');
   tableBody.innerHTML = ''; // kosongkan sebelum render

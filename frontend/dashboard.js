@@ -1,4 +1,4 @@
-import { getPendaftaran, getStatusLokasi, getLayananDigunakan, getTahuLayanan } from './api.js';
+import { getPendaftaran, getStatusLokasi, getLayananDigunakan, getTahuLayanan } from './api_Pendaftaran.js';
 
 /**
  * Enhanced Dashboard JavaScript
@@ -593,43 +593,39 @@ class DashboardEnhanced {
             {
                 title: 'Total Pendaftar',
                 value: this.formatNumber(data.total),
-                icon: 'bx-user',
-                color: 'primary'
+                icon: 'bi-person',
+                color: 'warning'
             },
             {
                 title: 'Pendaftar Hari Ini',
                 value: this.formatNumber(data.daily),
-                icon: 'bx-calendar',
+                icon: 'bi-calendar-day',
                 color: 'info'
             },
             {
                 title: 'Pendaftar Minggu Ini',
                 value: this.formatNumber(data.weekly),
-                icon: 'bx-calendar-week',
+                icon: 'bi-calendar-week',
                 color: 'success'
             },
             {
                 title: 'Pendaftar Bulan Ini',
                 value: this.formatNumber(data.monthly),
-                icon: 'bx-calendar-month',
+                icon: 'bi-calendar-month',
                 color: 'warning'
             }
         ];
 
         container.innerHTML = cards.map(card => `
             <div class="col-xl-3 col-md-6">
-                <div class="card kpi-card border-start border-start-${card.color} border-3">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-start">
-                            <div>
-                                <div class="kpi-label">${card.title}</div>
-                                <div class="kpi-value text-${card.color}">${card.value}</div>
-                            </div>
-                            <div class="avatar">
-                                <span class="avatar-initial rounded bg-label-${card.color}">
-                                    <i class="bx ${card.icon}"></i>
-                                </span>
-                            </div>
+                <div class="card kpi-card">
+                    <div class="card-body d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="kpi-label">${card.title}</div>
+                            <div class="kpi-value text-${card.color}">${card.value}</div>
+                        </div>
+                        <div class="icon-badge bg-${card.color}-subtle text-${card.color}">
+                            <i class="bi ${card.icon}"></i>
                         </div>
                     </div>
                 </div>
@@ -883,48 +879,76 @@ class DashboardEnhanced {
         container.appendChild(canvas);
 
         try {
-            // Coba menggunakan proxy lokal terlebih dahulu
-            let resp;
-            let payload;
+        // Generate dynamic parameters based on period and dates
+        const params = new URLSearchParams();
+        const { startDate, endDate } = this.getDateRange(period, customStartDate, customEndDate);
+        
+        if (period === 'custom' || period === 'all') {
+            // For custom and all periods, use start_date and end_date
+            params.append('start_date', startDate.toISOString().split('T')[0]);
+            params.append('end_date', endDate.toISOString().split('T')[0]);
+        } else if (period === 'year') {
+            // For year period, use current month and year
+            const now = new Date();
+            params.append('bulan', now.getMonth() + 1);
+            params.append('tahun', now.getFullYear());
+        } else {
+            // For other periods (week, month), use bulan and tahun based on startDate
+            params.append('bulan', startDate.getMonth() + 1);
+            params.append('tahun', startDate.getFullYear());
+        }
+
+        console.log('Mengambil data Naraya melalui proxy...');
+        let responseData; // Declare in function scope
+        
+        try {
+            // Use our PHP proxy to avoid CORS issues
+            const resp = await fetch(`/naraya-proxy.php?${params.toString()}`);
             
-            try {
-                console.log('Mencoba menggunakan proxy lokal...');
-                resp = await fetch('http://localhost:8001/naraya-report?bulan=8&tahun=2025');
-                if (!resp.ok) throw new Error('Proxy tidak tersedia');
-                payload = await resp.json();
-                console.log('Berhasil menggunakan proxy lokal');
-            } catch (proxyError) {
-                console.log('Proxy lokal gagal, mencoba akses langsung ke API...');
-                // Jika proxy gagal, coba akses langsung
-                resp = await fetch('https://wo.naraya.co.id/beta/api/v1/extend_report/?bulan=8&tahun=2025');
-                if (!resp.ok) throw new Error('HTTP ' + resp.status);
-                payload = await resp.json();
-                console.log('Berhasil mengakses API langsung');
+            if (!resp.ok) {
+                if (resp.status === 404) {
+                    throw new Error('API endpoint not found. Please check the URL');
+                } else {
+                    throw new Error(`HTTP error! Status: ${resp.status}`);
+                }
             }
+            
+            responseData = await resp.json(); // Assign to outer variable
+            console.log('Data Naraya berhasil diambil');
+        } catch (error) {
+            if (error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
+                console.error('CORS error or network issue:', error);
+                throw new Error('CORS error: Make sure the API allows requests from this origin');
+            }
+            throw error;
+        }
 
-            let rows = payload.data || [];
-            console.log('Data Naraya diterima:', rows.length, 'records');
+        let rows = responseData ? responseData.data : [];
+        console.log('Data Naraya diterima:', rows.length, 'records');
 
-            // Filter data berdasarkan periode seperti chart lainnya
-            if (period && period !== 'all') {
-                const { startDate, endDate } = this.getDateRange(period, customStartDate, customEndDate);
-                
-                console.log('Filtering Naraya data with period:', period);
-                console.log('Date range:', startDate, 'to', endDate);
-                
-                const filteredRows = rows.filter(item => {
-                    const itemDate = new Date(item.tanggal);
-                    const inRange = itemDate >= startDate && itemDate <= endDate;
+            // Filter data based on period
+            if (period) {
+                if (period !== 'all') {
+                    const { startDate, endDate } = this.getDateRange(period, customStartDate, customEndDate);
                     
-                    if (!inRange) {
-                        console.log(`Naraya item excluded: ${item.tanggal} (${item.unit})`);
-                    }
+                    console.log('Filtering Naraya data with period:', period);
+                    console.log('Date range:', startDate, 'to', endDate);
                     
-                    return inRange;
-                });
-                
-                console.log(`Naraya data filtered: ${rows.length} -> ${filteredRows.length} records`);
-                rows = filteredRows;
+                    const filteredRows = rows.filter(item => {
+                        const itemDate = new Date(item.tanggal);
+                        const inRange = itemDate >= startDate && itemDate <= endDate;
+                        
+                        if (!inRange) {
+                            console.log(`Naraya item excluded: ${item.tanggal} (${item.unit})`);
+                        }
+                        
+                        return inRange;
+                    });
+                    
+                    console.log(`Naraya data filtered: ${rows.length} -> ${filteredRows.length} records`);
+                    rows = filteredRows;
+                }
+                // For 'all' period, use all data without filtering
             }
 
             // Agregasi data berdasarkan tanggal per unit

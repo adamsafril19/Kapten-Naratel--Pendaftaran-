@@ -118,7 +118,7 @@ $bodyClass = 'payment-activity-page';
 </div>
 
 <script type="module">
-  import { getPaymentActivity } from '/api.js';
+  import { getPaymentActivity } from '/api_Pendaftaran.js';
 
   const tableBody = document.getElementById('table-body');
   const exportBtn = document.getElementById('exportBtn');

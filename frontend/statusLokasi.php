@@ -104,7 +104,7 @@ ob_start(); // mulai tangkap output
   </div>
 
 <script type="module">
-  import { getStatusLokasi, getStatusLokasiById, createStatusLokasi, updateStatusLokasi, deleteStatusLokasi } from '/api.js';
+  import { getStatusLokasi, getStatusLokasiById, createStatusLokasi, updateStatusLokasi, deleteStatusLokasi } from '/api_Pendaftaran.js';
 
   const tableBody = document.getElementById('table-body');
   tableBody.innerHTML = ''; // kosongkan "Loading..."

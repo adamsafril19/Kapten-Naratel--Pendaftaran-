@@ -216,7 +216,7 @@ $bodyClass = 'pendaftar-page'; // Added for page-specific styling
     getTahuLayanan,
     getLayananDigunakan,
     getAlasan
-  } from '/api.js';
+  } from '/api_Pendaftaran.js';
 
   const tableBody = document.getElementById('table-body');
   const pendaftaranModal = new bootstrap.Modal(document.getElementById('pendaftaranModal'));

@@ -120,14 +120,14 @@
 
   <ul class="menu-inner py-1">
     <!-- Dropdown Menu untuk Manajemen Data -->
-    <li class="menu-item<?= in_array($current, ['dashboard.php', 'pendaftar.php', 'statusLokasi.php', 'layananDigunakan.php', 'tahuLayanan.php', 'alasan.php', 'aktivitasPembayaran.php']) ? ' active open' : '' ?>">
+    <li class="menu-item<?= in_array($current, ['dashboard_Pendaftaran.php', 'pendaftar.php', 'statusLokasi.php', 'layananDigunakan.php', 'tahuLayanan.php', 'alasan.php', 'aktivitasPembayaran.php']) ? ' active open' : '' ?>">
       <a href="javascript:void(0);" class="menu-link menu-toggle">
         <i class="menu-icon icon-base bx bx-collection"></i>
-        <div>Manajemen Data</div>
+        <div>Manajemen Pendaftar</div>
       </a>
       <ul class="menu-sub">
-        <li class="menu-item<?= $current === 'dashboard.php' ? ' active' : '' ?>">
-          <a href="dashboard.php" class="menu-link">
+        <li class="menu-item<?= $current === 'dashboard_Pendaftaran.php' ? ' active' : '' ?>">
+          <a href="dashboard_Pendaftaran.php" class="menu-link">
             <div>Dashboard</div>
           </a>
         </li>
@@ -163,6 +163,36 @@
         </li>
       </ul>
     </li>
+    <!-- Dropdown Menu untuk Manajemen Data Pelanggan -->
+    <li class="menu-item<?= in_array($current, ['dashboard.php', 'paket.php', 'pelanggan.php', 'unit.php']) ? ' active open' : '' ?>">
+      <a href="javascript:void(0);" class="menu-link menu-toggle">
+        <i class="menu-icon icon-base bx bx-group"></i>
+        <div>Manajemen Data Pelanggan</div>
+      </a>
+      <ul class="menu-sub">
+        <li class="menu-item<?= $current === 'dashboard.php' ? ' active' : '' ?>">
+          <a href="dashboard.php" class="menu-link">
+            <div>Dashboard</div>
+          </a>
+        </li>
+        <li class="menu-item<?= $current === 'paket.php' ? ' active' : '' ?>">
+          <a href="paket.php" class="menu-link">
+            <div>Paket</div>
+          </a>
+        </li>
+        <li class="menu-item<?= $current === 'pelanggan.php' ? ' active' : '' ?>">
+          <a href="pelanggan.php" class="menu-link">
+            <div>Pelanggan</div>
+          </a>
+        </li>
+        <li class="menu-item<?= $current === 'unit.php' ? ' active' : '' ?>">
+          <a href="unit.php" class="menu-link">
+            <div>Unit</div>
+          </a>
+        </li>
+      </ul>
+    </li>
+
     <li class="menu-item">
       <a href="../logout.php" class="menu-link">
         <i class="menu-icon icon-base bx bx-power-off"></i>

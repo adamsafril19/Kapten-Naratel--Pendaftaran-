@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (isset($_COOKIE['jwt']) && !empty($_COOKIE['jwt'])) {
-  header('Location: dashboard.php');
+  header('Location: dashboard_Pendaftaran.php');
   exit();
 }
 ?>
@@ -160,7 +160,7 @@ if (isset($_COOKIE['jwt']) && !empty($_COOKIE['jwt'])) {
             }
 
             showMsg('success', 'Login successful. Redirecting...');
-            setTimeout(() => window.location.href = 'dashboard.php', 1000);
+            setTimeout(() => window.location.href = 'dashboard_Pendaftaran.php', 1000);
           } else {
             showMsg('error', data.message || 'Login failed');
           }

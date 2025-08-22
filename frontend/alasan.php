@@ -105,7 +105,7 @@ ob_start(); // mulai tangkap output
   </div>
 
 <script type="module">
-  import { getAlasan, getAlasanById, createAlasan, updateAlasan, deleteAlasan } from '/api.js';
+  import { getAlasan, getAlasanById, createAlasan, updateAlasan, deleteAlasan } from '/api_Pendaftaran.js';
 
   const tableBody = document.getElementById('table-body');
   tableBody.innerHTML = ''; // kosongkan sebelum render

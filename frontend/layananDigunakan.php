@@ -112,7 +112,7 @@ ob_start();
     createLayananDigunakan,
     updateLayananDigunakan,
     deleteLayananDigunakan
-  } from '/api.js';
+  } from '/api_Pendaftaran.js';
 
   const tableBody = document.getElementById('table-body');
   tableBody.innerHTML = '';
